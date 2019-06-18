@@ -1,5 +1,6 @@
 package ar.edu.calculadora.myCalculadora;
 
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -19,7 +20,18 @@ public class AppTest
     {
         super( testName );
     }
-
+    
+    
+	/*
+	 * public static void main(String[] args) {
+	 * 
+	 * 
+	 * CalculosControlador c = new CalculosControlador ();
+	 * 
+	 * String resultado = c.obtenerAB("(2.3,34.2)"); System.out.print(resultado);
+	 * 
+	 * }
+	 */
     /**
      * @return the suite of tests being tested
      */
