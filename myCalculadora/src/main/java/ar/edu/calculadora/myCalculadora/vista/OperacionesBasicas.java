@@ -57,7 +57,7 @@ public class OperacionesBasicas extends JFrame {
 	public OperacionesBasicas() {
 		setTitle("Operaciones Basicas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 751, 451);
+		setBounds(100, 100, 1002, 451);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -95,7 +95,7 @@ public class OperacionesBasicas extends JFrame {
 		
 		lblNewLabel = new JLabel("Resultado :");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel.setBounds(80, 259, 104, 16);
+		lblNewLabel.setBounds(12, 260, 104, 16);
 		contentPane.add(lblNewLabel);
 		
 		JButton btnCalcular = new JButton("Limpiar");
@@ -104,6 +104,7 @@ public class OperacionesBasicas extends JFrame {
 			
 			textFieldNro1.setText(null);
 			textFieldNro2.setText(null);
+			lblRespuesta.setText("");
 			lblRespuesta.setVisible(false);
 			
 			}
@@ -118,7 +119,7 @@ public class OperacionesBasicas extends JFrame {
 		
 		lblRespuesta = new JLabel("respuesta");
 		lblRespuesta.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblRespuesta.setBounds(196, 260, 537, 16);
+		lblRespuesta.setBounds(101, 260, 741, 16);
 		contentPane.add(lblRespuesta);
 		lblRespuesta.setVisible(false);
 		comboBox.addItem(" ");
@@ -151,6 +152,7 @@ public class OperacionesBasicas extends JFrame {
     	//2=Polar
 		Complejos nro1;
 		Complejos nro2;  	
+	if (this.textFieldNro1.getText().length()>1 && this.textFieldNro2.getText().length()>1)	{
 		
 	int	intNro1 = calculosControlador.isBinomicaPolar(this.textFieldNro1.getText());
 	int intNro2 = calculosControlador.isBinomicaPolar(this.textFieldNro2.getText());
@@ -162,7 +164,7 @@ public class OperacionesBasicas extends JFrame {
 		 
 	}else if (intNro2==0) {
 		
-		 lblRespuesta.setText(" Formato correcto:Binomica(a,b)- Polar[c,dPI]");
+		 lblRespuesta.setText(" Dato ingresado Incorrecto .Formato correcto:Binomica(a,b)- Polar[c,dPI]");
 		 lblRespuesta.setVisible(true);
 
 	}else if (intNro1 != 0 && intNro2 != 0) {
@@ -224,6 +226,7 @@ public class OperacionesBasicas extends JFrame {
             	 nro2.transformarAPolar(nro2.pReal, nro2.pImaginaria);
              }
              
+             
              lblRespuesta.setText(calculosControlador.multiplicar(nro1, nro2));
              lblRespuesta.setVisible(true);
 			break;
@@ -247,6 +250,13 @@ public class OperacionesBasicas extends JFrame {
 		default:
 			break;
 		}
+    	
+	}else {
+		
+		 lblRespuesta.setText( "Dato ingresado Incorrecto.Formato correcto Binomica (a,b)  Polar[c,dPI]");
+		 lblRespuesta.setVisible(true);
+		
+	}
     	
 	}
     }

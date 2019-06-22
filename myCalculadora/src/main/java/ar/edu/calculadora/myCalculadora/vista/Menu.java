@@ -8,6 +8,7 @@ import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.SystemColor;
 
 
 public class Menu {
@@ -42,7 +43,7 @@ public class Menu {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
+		frame.getContentPane().setBackground(SystemColor.menu);
 		frame.setBounds(100, 100, 896, 460);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -51,7 +52,7 @@ public class Menu {
 		menuBar.setForeground(Color.MAGENTA);
 		menuBar.setBounds(0, 0, 878, 26);
 		frame.getContentPane().add(menuBar);
-		menuBar.setBackground(Color.LIGHT_GRAY);
+		menuBar.setBackground(SystemColor.menu);
 		
 		JMenu c = new JMenu("Opciones");
 		
@@ -76,7 +77,7 @@ public class Menu {
 		JMenuItem menuItem1 = new JMenuItem("Operaciones Basicas");
 		c.add(menuItem1);
 		
-			menuItem1.addActionListener(new ActionListener() {
+	   menuItem1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				OperacionesBasicas ob = new OperacionesBasicas();
@@ -88,10 +89,40 @@ public class Menu {
 		JMenuItem menuItem2 = new JMenuItem("Operaciones Avanzadas");
 		c.add(menuItem2);
 		
+		
+		   menuItem2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					OperacionesAvanzadas ob = new OperacionesAvanzadas();
+					ob.setVisible(true);
+					
+				}
+			});
+
+		
 		JMenuItem menuItem3 = new JMenuItem("Fasores");
 		c.add(menuItem3);
+		
+		   menuItem3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					Fasores ob = new Fasores();
+					ob.setVisible(true);
+					
+				}
+			});
+
 	
 		JMenuItem menuItem4 = new JMenuItem("Salir");
 		c.add(menuItem4);
+		
+		   menuItem4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				System.exit(0);
+					
+				}
+			});
+
 	}
 }

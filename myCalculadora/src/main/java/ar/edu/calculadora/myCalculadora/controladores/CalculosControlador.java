@@ -2,7 +2,12 @@ package ar.edu.calculadora.myCalculadora.controladores;
 
 
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.edu.calculadora.myCalculadora.modelo.Complejos;
+import ar.edu.calculadora.myCalculadora.modelo.Raices;
 import ar.edu.calculadora.myCalculadora.vista.OperacionesBasicas;
 
 
@@ -65,10 +70,11 @@ public class CalculosControlador {
 	}
 	
 	public Boolean validacionFormatoPolar(String s) {
-        String pattern = "\\[\\d(.\\d)?,\\d(.\\d)?PI\\]";
+        String pattern = "\\[\\d(\\.\\d{1,2})?,\\d(\\.\\d{1,2})?PI\\]";
+        Boolean b=  s.matches(pattern);
         String[] pattern2 = s.split(",");
         String parte = pattern2[1];
-      Boolean b=  s.matches(pattern);
+ 
       
    
       
@@ -85,10 +91,12 @@ public class CalculosControlador {
     }
 	
 	public Boolean validacionFormatoBinomica(String s) {
-		String pattern = "\\(\\d(.\\d)?,\\d(.\\d)?\\)";
+		String pattern = "\\(\\d(\\.\\d{1,2})?,\\d(\\.\\d{1,2})?\\)";
 		
-		return s.matches(pattern);
 		
+		Boolean b= s.matches(pattern);
+		
+		return b;
 			
 	}
 	
@@ -121,8 +129,8 @@ public class CalculosControlador {
 		
 		resulSuma =complejosOperaciones.sumaBinario(nro1, nro2);
 		
-		
-		resultado = "(" + resulSuma.getpReal() + " , " + resulSuma.getpImaginaria() + ")"; 
+		DecimalFormat f = new DecimalFormat("####.##");
+		resultado = "(" + f.format(resulSuma.getpReal()) + " , " + f.format(resulSuma.getpImaginaria() )+ ")"; 
 		
 		return resultado;
 		
@@ -139,8 +147,8 @@ public class CalculosControlador {
 		
 		resul =complejosOperaciones.restaBinario(nro1, nro2);
 		
-		
-		resultado = "(" + resul.getpReal() + " , " + resul.getpImaginaria() + ")";
+		DecimalFormat f = new DecimalFormat("####.###");
+		resultado = "(" + f.format(resul.getpReal()) + " , " + f.format(resul.getpImaginaria() )+ ")";
 		
 		return resultado;
 		
@@ -155,9 +163,9 @@ public class CalculosControlador {
 		Complejos resul ;
 		
 		resul =complejosOperaciones.multiplicarPolar(nro1, nro2);
+		DecimalFormat f = new DecimalFormat("####.###");
 		
-		
-		resultado = "(" + resul.getpReal() + " , " + resul.getpImaginaria() + ")";
+		resultado = "(" + f.format(resul.getpReal()) + " , " + f.format(resul.getpImaginaria()) + ")";
 		
 		return resultado;
 		
@@ -171,21 +179,22 @@ public class CalculosControlador {
 		
 		resul =complejosOperaciones.dividirPolar(nro1, nro2);
 		
-		
-		resultado = "(" + resul.getpReal() + " , " + resul.getpImaginaria() + ")";
+		DecimalFormat f = new DecimalFormat("####.###");
+		resultado = "(" + f.format(resul.getpReal()) + " , " + f.format(resul.getpImaginaria()) + ")";
 		
 		return resultado;
 		
 	}
     
 	public String transformarABinomica(String s ) {
+		Complejos nro = new Complejos();
 		Complejos nroC = new Complejos();
+		nro =this.obtenerParteAB(s);
 		
-		nroC =this.obtenerParteAB(s);
+		DecimalFormat f = new DecimalFormat("####.###");
+		nroC = complejosOperaciones.aBinomica(nro.modulo, nro.argumento);
 		
-		nroC.aBinomica(nroC.modulo, nroC.argumento);
-		
-		return "(" + nroC.pReal +" , "+ nroC.pImaginaria+" )"; 
+		return "(" + f.format(nroC.pReal) +" , "+ f.format(nroC.pImaginaria)+" )"; 
 				
 		
 		
@@ -195,13 +204,99 @@ public class CalculosControlador {
 		
 		nroC =this.obtenerParteAB(s);
 		
-		nroC.transformarAPolar(nroC.pReal, nroC.pImaginaria);
+		DecimalFormat f = new DecimalFormat("####.###");
+		nroC=nroC.transformarAPolar(nroC.pReal, nroC.pImaginaria);
 		
-		return "[" + nroC.modulo +" , "+ nroC.argumento+"PI"+"]"; 
+		return "[" + f.format(nroC.modulo) +" , "+ f.format(nroC.argumento)+"PI"+"]"; 
 				
 		
 		
 	}
+	
+	
+	public Boolean validarIndice(String indice) {
+		
+	
+		
+		try {
+			if (complejosOperaciones.isNumeric(indice)) {
+
+				return true;
+				
+			}else {
+				
+				return false;
+				
+			}
+		} catch (Exception e) {
+			
+			return false;
+		}
+		
+	}
+	
+	public Boolean validarNroOperacionesAvanzadas(String nro){
+		
+	if (this.validacionFormatoBinomica(nro) || this.validacionFormatoPolar(nro)) {
+		
+		return true;
+	}else {
+		
+		return false;
+	} 	}
+	
+	
+	
+	public ArrayList<Raices> raicesradicacion(String indice , String nroC) {
+		
+		Complejos nro = new Complejos();
+		 nro = this.obtenerParteAB(nroC);
+		if (validacionFormatoBinomica(nroC)) {
+		nro =complejosOperaciones.transformarAPolar(nro.getpReal(), nro.getpImaginaria());
+	      
+		}
+		 
+		int ind = Integer.parseInt(indice);
+		
+		ArrayList<Integer> listaIndice = (ArrayList<Integer>) complejosOperaciones.raicesPrimtivas(ind);
+
+		ArrayList<Raices> raices = complejosOperaciones.radicacion(listaIndice, nro);
+		
+		
+		return raices;
+		
+	}
+	
+	public String potencia(String indice , String nroS){
+		
+		Complejos nro = new Complejos();
+		Complejos resultadoPotencia = new Complejos();
+		
+		 nro = this.obtenerParteAB(nroS);
+		 
+		 if (validacionFormatoBinomica(nroS)) {
+			 
+			 nro= complejosOperaciones.transformarAPolar(nro.getpReal(), nro.getpImaginaria());
+			 
+		 }
+		 
+		int ind = Integer.parseInt(indice);
+		
+		resultadoPotencia = complejosOperaciones.potenciaPolar(nro, ind);
+		 DecimalFormat f = new DecimalFormat("####.###");
+		
+		return "[ "+ f.format(resultadoPotencia.getModulo())+ ","+ f.format(resultadoPotencia.getArgumento())+"PI]";
+		
+		
+		 
+		 
+		
+		
+	}
+	
+	
+
+	
 	
     }
     

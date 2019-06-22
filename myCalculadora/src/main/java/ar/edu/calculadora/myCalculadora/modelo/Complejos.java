@@ -106,23 +106,34 @@ public Complejos( double modulo, String argumento) {
         
     }
 
-    public void aBinomica(double modulo , double argumento){
+    public Complejos aBinomica(double modulo , double argumento){
     	
-        this.pReal = (double) (modulo* Math.cos(argumento * Math.PI));
-        this.pImaginaria = (double) (modulo* Math.sin(argumento * Math.PI));}
+    	Complejos nroC = new Complejos();
+         double pReal = (double) (modulo* Math.cos(argumento * Math.PI));
+         double pImaginaria = (double) (modulo* Math.sin(argumento * Math.PI));
+       nroC.setModulo(modulo);
+       nroC.setArgumento(argumento);
+       nroC.setpImaginaria(pImaginaria);
+       nroC.setpReal(pReal);
+       
+       return nroC;
+    
+    }
    
 
-    public void transformarAPolar(double pReal , double pImg){
+    public Complejos transformarAPolar(double pReal , double pImg){
     	
-    	//Obtengo el argumento
-        double argumento =   (double) 
-                (Math.atan2(this.pImaginaria, this.pReal));
-        
-      //  double argumentoRadianes =   (double) Math.toRadians(argumento);
-        
+         Complejos nroC = new Complejos();
+         nroC.setpReal(pReal);
+         nroC.setpImaginaria(pImg);
+         
+         double aux = pImg/pReal;
     	
+    	double argumento =   (double) 
+                (Math.atan(aux));
     
-        
+     
+
     if (argumento < 0 ) {
     	
     	this.argumento = (2* Math.PI) + argumento;
@@ -131,13 +142,15 @@ public Complejos( double modulo, String argumento) {
     	this.argumento = argumento;
     }
     
-    argumento= ( argumento / Math.PI);
+	argumento= ( argumento / Math.PI);
     
-    double   modulo = (double) Math.sqrt((Math.pow(this.pReal, 2) + 
-            Math.pow(this.pImaginaria, 2)));
+    double   modulo = (double) Math.sqrt((Math.pow(pReal, 2) + 
+            Math.pow(pImg, 2)));
     
-    this.setModulo(modulo);
-    this.setArgumento(argumento);
+    nroC.setModulo(modulo);
+    nroC.setArgumento(argumento);
+    
+    return nroC;
 }
 
  public Complejos sumaBinario(Complejos z1 , Complejos z2) {
@@ -198,72 +211,52 @@ public Complejos( double modulo, String argumento) {
     	
     	resultado.aBinomica(resultado.modulo, resultado.argumento);
     	
-    	return resultado;
+     	return resultado;
     }
     
     public List<Integer> raicesPrimtivas (int orden){
 
     	List<Integer> raices = new ArrayList<Integer>();
-    	List<Integer> excluidos = new ArrayList<Integer>();
-    	int resto;
-    	int valor = 0;
-    	boolean esRaiz = true;
+    	int indice = orden-1;
+    	int resto = 0;
     	
-    	raices.add(1);	// 1 Siempre es raiz
-    	for (int i=2; i<orden; i++) {
-			esRaiz = true;
+
+    	for (int i=1; i<= indice; i++) {
+		
     		resto = orden % i;
-    		if (resto != 0) {
-    			if (excluidos.isEmpty()) {
-    				for (int j=0; j<raices.size(); j++) {
-    					valor = i%raices.get(j);
-    					if (valor==0) { 
-        					//valor = raices.get(j);
-    						esRaiz = false;
-    						break;
-    					}
-    				}
-    				if (esRaiz) {
-    					raices.add(i);
-    					esRaiz = true;
-    				}
-    			} else {
-     				for (int j=0; j<excluidos.size(); j++) {
-    					valor = i%excluidos.get(j);
-    					if (valor==0){
-    						//valor = excluidos.get(j);
-    						esRaiz = false;
-    						break;
-    					}
-     				}
-    				if (esRaiz) {
-    					raices.add(i);
-    					esRaiz = true;
-    				}
-    			}
-    		} else {
-    			excluidos.add(i);
-    		}
+    		if (resto == 0) {
+    		
+    			raices.add(i);
+    			 }
+    		
     	}
     	return raices;
     }
 
-    public void Radicacion(int orden, Complejos nroC){
-    	double argumento=0;
+    public  ArrayList<Raices> radicacion( List<Integer> ordenes, Complejos nroC){
     	
-    	Complejos nr = new Complejos();
-    	//this.transformarAPolar();
-    	for (int i=1; i<=orden; i++){
-    		argumento = (argumento + 2*i*(float)Math.PI)/i;
-    		
-    		 float numero = (orden/i);
-    		
+    	 ArrayList<Raices>  listaRaices = new ArrayList<Raices> () ;
+    	 
+    
+        		 
+    	 
+    	 for(int orden : ordenes) {
     		 
+    		 Raices raices = new Raices();
+    	    		 
+    		 double arg= (2 * (orden-1) * Math.PI) / orden;
+    		 
+    		 raices.setIndice(orden);
+    		 raices.setModulo(nroC.modulo);
+    		 raices.setArgumento(nroC.argumento + arg);
+    		  
+    		 listaRaices.add(raices);
+    	 }
+    	 
+    	 
+    	 return listaRaices;
+    	 
 
-
-    		
-    	}
-    	// El modulo siempre es igual para todas raices
     }	
 
     
@@ -281,21 +274,26 @@ public Complejos( double modulo, String argumento) {
          }
              return false;
              
-         }
+       }
+    
+    
     public Complejos potenciaPolar (Complejos z1 , int i) {
 
     	Complejos resultado = new Complejos(modulo, argumento);
-
-		int potencia = 1;
-		double arg = 0;
+    	double mod = z1.modulo;
 		
+		for(int j = 2; j<= i ;j++) {
+			double aux ;
 		
-		for(int j = 0; j<i ;j++) {
-			potencia *= z1.modulo;
+			aux = z1.modulo*mod ;
+			z1.modulo= aux;
+			
+		
 		}
-		arg = (double) (z1.argumento*i);
-		resultado.modulo = potencia;
-		resultado.argumento = arg;
+	
+    resultado.setModulo(z1.modulo);
+    resultado.setArgumento(i*z1.argumento);
+
 		
 		return resultado;
     }
